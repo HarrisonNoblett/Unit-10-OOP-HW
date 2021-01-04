@@ -10,10 +10,95 @@ const outputPath = path.join(OUTPUT_DIR, "team.html");
 
 const render = require("./lib/htmlRenderer");
 
+//an array that holds all of the workers
+const workers = []
 
-// Write code to use inquirer to gather information about the development team members,
-// and to create objects for each team member (using the correct classes as blueprints!)
+//manager prompts asking for name, id, email, and Office Number
+function managerPrompt() {
+    inquirer.prompt([
+        {
+            type: 'input',
+            message: 'Please enter your full name',
+            name: 'Name',
+        },
+        {
+            type: 'input',
+            message: 'Please enter your ID',
+            name: 'ID',
+        },
+        {
+            type: 'input',
+            message: 'Please enter your email',
+            name: 'Email',
+        },
+        {
+            type: 'input',
+            message: 'Please enter your office number',
+            name: 'Office-Number',
+        }
+        //.then function to set somthing to happen after they have gotten this info from the client
+    ]).then(response => {
+        const manager = new Manager(response.Name, response.ID, response.Email, response.Office-Number)
+        workers.push(manager);
+    })
+}
+//intern prompts asking for name, id, email, and school 
+function internPrompt() {
+    inquirer.prompt([
+        {
+            type: 'input',
+            message: 'Please enter your name',
+            name: 'Name',
+        },
+        {
+            type: 'input',
+            message: 'Please enter your ID',
+            name: 'ID',
+        },
+        {
+            type: 'input',
+            message: 'Please enter your email',
+            name: 'Email',
+        },
+        {
+            type: 'input',
+            message: 'Please enter the name of your school',
+            name: 'School',
+        },
+    ]).then(response => {
+        const intern = new Intern(response.Name, response.ID, response.Email, response.School)
+        workers.push(intern);
+    })
+}
 
+//Prompting the engineers for their name, id, email, and github
+function engineerPrompt() {
+    inquirer.prompt([
+        {
+            type: 'input',
+            message: 'Please enter your name',
+            name: 'Name',
+        },
+        {
+            type: 'input',
+            message: 'Please enter your ID',
+            name: 'ID',
+        },
+        {
+            type: 'input',
+            message: 'Please enter your Email',
+            name: 'Email',
+        },
+        {
+            type: 'input',
+            message: 'Please enter your github',
+            name: 'github',
+        },
+    ]).then(response => {
+        const engineer = new Engineer(response.Name, response.ID, response.Email, response.github)
+        workers.push(engineer);
+    })
+}
 // After the user has input all employees desired, call the `render` function (required
 // above) and pass in an array containing all employee objects; the `render` function will
 // generate and return a block of HTML including templated divs for each employee!
