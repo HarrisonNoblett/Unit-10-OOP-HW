@@ -36,10 +36,11 @@ function managerPrompt() {
             message: 'Please enter your office number',
             name: 'Office-Number',
         }
-        //.then function to set somthing to happen after they have gotten this info from the client
+        //.then function to set the answers to sppend to the workers array after they have gotten this info from the client
     ]).then(response => {
         const manager = new Manager(response.Name, response.ID, response.Email, response.Office-Number)
         workers.push(manager);
+        newRole()
     })
 }
 //intern prompts asking for name, id, email, and school 
@@ -68,6 +69,7 @@ function internPrompt() {
     ]).then(response => {
         const intern = new Intern(response.Name, response.ID, response.Email, response.School)
         workers.push(intern);
+        newRole()
     })
 }
 
@@ -97,7 +99,30 @@ function engineerPrompt() {
     ]).then(response => {
         const engineer = new Engineer(response.Name, response.ID, response.Email, response.github)
         workers.push(engineer);
+        newRole()
     })
+}
+
+//a function that will prompt the user to choose a role and than run the function that prompts the specific questions for the role
+function newRole() {
+    inquirer.prompt([
+        {
+            type: 'list',
+            messages: 'Please choose a role for your team',
+            choices: ['Manager', 'Intern', 'Engineer', 'Finished'],
+            name: 'Role'
+        }
+    ]).then(function(response) {
+        if (response.Role === 'Intern') {
+            internPrompt();
+        } else if (response.Role === 'Manager') {
+            managerPrompt();
+        } else if (response.Role === 'Engineer') {
+            engineerPrompt();
+        } else if (response.Role === 'Finished') {
+            fs.writeFileSync(outputPath, render(workers), 'utf-8');
+        }
+    });
 }
 // After the user has input all employees desired, call the `render` function (required
 // above) and pass in an array containing all employee objects; the `render` function will
