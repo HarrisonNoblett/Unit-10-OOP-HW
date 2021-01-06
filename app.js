@@ -13,6 +13,28 @@ const render = require("./lib/htmlRenderer");
 //an array that holds all of the workers
 const workers = []
 
+//a function that will prompt the user to choose a role and than run the function that prompts the specific questions for the role
+function newRole() {
+    inquirer.prompt([
+        {
+            type: 'list',
+            messages: 'Please choose a role for your team',
+            choices: ['Manager', 'Intern', 'Engineer', 'Finished'],
+            name: 'Role'
+        }
+    ]).then(function(response) {
+        if (response.Role === 'Intern') {
+            internPrompt();
+        } else if (response.Role === 'Manager') {
+            managerPrompt();
+        } else if (response.Role === 'Engineer') {
+            engineerPrompt();
+        } else if (response.Role === 'Finished') {
+            fs.writeFileSync(outputPath, render(workers), 'utf-8');
+        }
+    });
+}
+
 //manager prompts asking for name, id, email, and Office Number
 function managerPrompt() {
     inquirer.prompt([
@@ -103,27 +125,6 @@ function engineerPrompt() {
     })
 }
 
-//a function that will prompt the user to choose a role and than run the function that prompts the specific questions for the role
-function newRole() {
-    inquirer.prompt([
-        {
-            type: 'list',
-            messages: 'Please choose a role for your team',
-            choices: ['Manager', 'Intern', 'Engineer', 'Finished'],
-            name: 'Role'
-        }
-    ]).then(function(response) {
-        if (response.Role === 'Intern') {
-            internPrompt();
-        } else if (response.Role === 'Manager') {
-            managerPrompt();
-        } else if (response.Role === 'Engineer') {
-            engineerPrompt();
-        } else if (response.Role === 'Finished') {
-            fs.writeFileSync(outputPath, render(workers), 'utf-8');
-        }
-    });
-}
 // After the user has input all employees desired, call the `render` function (required
 // above) and pass in an array containing all employee objects; the `render` function will
 // generate and return a block of HTML including templated divs for each employee!
